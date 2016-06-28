@@ -4,13 +4,18 @@ require 'csv'
 # The ContactList class will work with Contact objects instead of interacting with the CSV file directly
 class Contact
 
-  attr_accessor :name, :email
+  @@contacts = 0
+
+  attr_accessor :name, :email, :index
   
   # Creates a new contact object
   # @param name [String] The contact's name
   # @param email [String] The contact's email address
   def initialize(name, email)
     # TODO: Assign parameter values to instance variables.
+    @name = name
+    @email = email
+    @index = @@contacts += 1
   end
 
   # Provides functionality for managing contacts in the csv file.
@@ -20,7 +25,7 @@ class Contact
     # @return [Array<Contact>] Array of Contact objects
     def all
       # TODO: Return an Array of Contact instances made from the data in 'contacts.csv'.
-        CSV.read("./contacts.csv")
+      CSV.read("./contacts.csv")
     end
 
     # Creates a new contact, adding it to the csv file, returning the new contact.
@@ -45,6 +50,8 @@ class Contact
     # @return [Array<Contact>] Array of Contact objects.
     def search(term)
       # TODO: Select the Contact instances from the 'contacts.csv' file whose name or email attributes contain the search term.
+      m = CSV.read("./contacts.csv")
+      m.select { |entry| entry.join.downcase.match(term.downcase) }
     end
 
   end

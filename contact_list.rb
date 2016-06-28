@@ -25,11 +25,18 @@ class ContactList
     name = STDIN.gets.chomp
     puts "Enter email address of the contact"
     email = STDIN.gets.chomp
+    Contact.new(name,email)
     Contact.create(name,email)
   elsif ARGV[0] == "show"
     #Show contact details
   elsif ARGV[0] == "search"
-    #search for a user
+    #search for a user   
+    n = Contact.search(ARGV[1]).inject(0) do |count,row|
+      puts "#{row[0]} (#{row[1]})"
+      count +=1
+    end
+    puts "---"
+    puts "#{n} records total"
   end
 
 end
