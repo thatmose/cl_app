@@ -6,37 +6,42 @@ require_relative 'contact'
 class ContactList
   # TODO: Implement user interaction. This should be the only file where you use `puts` and `gets`.
   if ARGV.empty?
-    puts "Here is a list of available commands:"
-    puts "  new     - Create a new contact"
-    puts "  list    - List all contacts"
-    puts "  show    - Show a contact"
-    puts "  search  - Search contacts"
+    puts "  Here is a list of available commands:"
+    puts "      new     - Create a new contact"
+    puts "      list    - List all contacts"
+    puts "      show    - Show a contact"
+    puts "      search  - Search contacts"
   elsif ARGV[0] == "list"
     #Display the people in the contact list
-    m = Contact.all.inject(0) do |count,row|
-      puts "#{row[0]} (#{row[1]})"
-      count +=1
+    Contact.all.each do |row|
+      puts "#{row[0]}: #{row[1]} (#{row[2]})"
     end
     puts "---"
-    puts "#{m} records total"
+    puts "#{Contact.all.count} records total"
   elsif ARGV[0] == "new"
     #Add a new contact
     puts "Enter the name of the contact"
     name = STDIN.gets.chomp
     puts "Enter email address of the contact"
     email = STDIN.gets.chomp
-    Contact.new(name,email)
     Contact.create(name,email)
+    puts "Contact successfully added"
   elsif ARGV[0] == "show"
     #Show contact details
+    row = Contact.find(ARGV[1])
+    begin
+      raise StandardError, "Contact cannot be found!" if row == nil
+      puts "#{row[0]}: #{row[1]} (#{row[2]})"
+    rescue Exception => e
+      puts e.message
+    end
   elsif ARGV[0] == "search"
     #search for a user   
-    n = Contact.search(ARGV[1]).inject(0) do |count,row|
-      puts "#{row[0]} (#{row[1]})"
-      count +=1
+    results = Contact.search(ARGV[1]).each do |row|
+      puts "#{row[0]}: #{row[1]} (#{row[2]})"
     end
     puts "---"
-    puts "#{n} records total"
+    puts "#{results.count} records total"
   end
 
 end
