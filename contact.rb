@@ -31,10 +31,15 @@ class Contact
     # @param email [String] the contact's email
     def create(name, email)
       # TODO: Instantiate a Contact, add its data to the 'contacts.csv' file, and return it.
-      con = Contact.new(name,email)
-      index = CSV.read("./contacts.csv").count + 1
-      CSV.open("./contacts.csv","a") do |csv|
-        csv << [index,con.name,con.email]
+      if search(email) == []
+        con = Contact.new(name,email)
+        index = CSV.read("./contacts.csv").count + 1
+        CSV.open("./contacts.csv","a") do |csv|
+          csv << [index,con.name,con.email]
+        end
+        true
+      else
+        false
       end
     end
     
@@ -58,4 +63,7 @@ class Contact
 
   end
 
+
 end
+
+  
